@@ -42,15 +42,13 @@ before_script:
     pip install 'ghp-import' --user
     pip install 'pytoml' --user
     export CARGO_PACKAGE_NAME=$(python2 << __EOF__                                                                                                                            [...t/working/Rust/nearly-eq](develop|✚3)
-      import pytoml as toml
+    import pytoml as toml
+    with open('Cargo.toml', 'rb') as fin:
+        obj = toml.load(fin)
 
-      with open('Cargo.toml', 'rb') as fin:
-          obj = toml.load(fin)
-
-      print(obj["package"]["name"])
-
-      __EOF__
-      )
+    print(obj["package"]["name"])
+    __EOF__
+    )
     echo CARGO_PACKAGE_NAME=$CARGO_PACKAGE_NAME
   fi
 
