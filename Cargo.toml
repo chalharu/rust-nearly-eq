@@ -1,13 +1,13 @@
 [package]
 name = "nearly_eq"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Mitsuharu Seki <mitsu1986@gmail.com>"]
 repository = "https://github.com/chalharu/rust-nearly-eq"
 keywords = ["assert"]
 license = "MPL-2.0"
 readme = "README.md"
 description = "Nearly equal traits and assertion"
-documentation = "https://docs.rs/nearly-eq/"
+documentation = "https://docs.rs/nearly_eq/"
 
 [lib]
 name = "nearly_eq"
