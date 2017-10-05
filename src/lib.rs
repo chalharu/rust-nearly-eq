@@ -1,3 +1,5 @@
+//! Trait for nearly equality comparisons.
+//!
 //! # Licensing
 //! This Source Code is subject to the terms of the Mozilla Public License
 //! version 2.0 (the "License"). You can obtain a copy of the License at
@@ -6,12 +8,15 @@
 #[macro_use]
 mod assert;
 
+/// Trait for nearly equality comparisons.
 pub trait NearlyEq<Rhs: ?Sized = Self, Diff: ?Sized = Self> {
     fn eps() -> Diff;
 
+    /// This method tests for self and other values to be nearly equal.
     fn eq(&self, other: &Rhs, eps: &Diff) -> bool;
 
     #[inline]
+    /// This method tests for not nearly equal.
     fn ne(&self, other: &Rhs, eps: &Diff) -> bool {
         !self.eq(other, eps)
     }
