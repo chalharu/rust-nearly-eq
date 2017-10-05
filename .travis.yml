@@ -37,10 +37,11 @@ before_script:
     cd ${TRAVIS_BUILD_DIR}
     rm -rf kcov
   fi
-- "[ ${TRAVIS_OS_NAME} = linux ] && pip install 'pytoml' --user && export CARGO_PACKAGE_NAME=$(python2 << __EOF__\nimport pytoml as toml\nwith open('Cargo.toml', 'rb') as fin:\n    obj = toml.load(fin)\n\nprint(obj[\"package\"][\"name\"])\n__EOF__\n)"
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     pip install 'ghp-import' --user
+    pip install 'pytoml' --user
+    export CARGO_PACKAGE_NAME=$(python get_cargo_package_name.py)
     echo CARGO_PACKAGE_NAME=$CARGO_PACKAGE_NAME
   fi
 
