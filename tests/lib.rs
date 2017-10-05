@@ -44,6 +44,14 @@ fn bad_compare_with_vector() {
 }
 
 #[test]
+#[should_panic]
+fn bad_len_compare_with_vector() {
+    let left = vec![1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
+    let right = vec![1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
 fn compare_with_slice() {
     let left = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
     let right = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
@@ -56,4 +64,27 @@ fn bad_compare_with_slice() {
     let left = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.01];
     let right = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
     assert_nearly_eq!(&left as &[f32], &right as &[f32]);
+}
+
+#[test]
+#[should_panic]
+fn bad_len_compare_with_slice() {
+    let left = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
+    let right = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+    assert_nearly_eq!(&left as &[f32], &right as &[f32]);
+}
+
+#[test]
+fn compare_with_array() {
+    let left = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+    let right = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_array() {
+    let left = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.01];
+    let right = [1f32, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+    assert_nearly_eq!(left, right);
 }

@@ -6,8 +6,6 @@
 #[macro_use]
 mod assert;
 
-use std::{f32, f64};
-
 pub trait NearlyEq<Rhs: ?Sized = Self, Diff: ?Sized = Self> {
     fn eps() -> Diff;
 
@@ -97,4 +95,32 @@ impl<'a, A: ?Sized, B, C: NearlyEq<A, B> + ?Sized> NearlyEq<A, B> for &'a C {
     fn eq(&self, other: &A, eps: &B) -> bool {
         (*self).eq(&other, eps)
     }
+}
+
+macro_rules! array_impls {
+    ($($N:expr)+) => {
+        $(
+            impl<A, B, C: NearlyEq<A, B>> NearlyEq<[A; $N], B> for [C; $N] {
+                fn eps() -> B {
+                    C::eps()
+                }
+
+                fn eq(&self, other: &[A; $N], eps: &B) -> bool {
+                    for i in 0..$N {
+                        if self[i].ne(&other[i], eps) {
+                            return false;
+                        }
+                    }
+                    true
+                }
+            }
+        )+
+    }
+}
+
+array_impls! {
+     0  1  2  3  4  5  6  7  8  9
+    10 11 12 13 14 15 16 17 18 19
+    20 21 22 23 24 25 26 27 28 29
+    30 31 32
 }
