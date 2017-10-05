@@ -41,8 +41,8 @@ before_script:
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     pip install 'ghp-import' --user
     pip install 'pytoml' --user
-    export CARGO_PACKAGE_NAME=$(python2 << __EOF__                                                                                                                            [...t/working/Rust/nearly-eq](develop|✚3)
-    import pytoml as toml
+    export CARGO_PACKAGE_NAME=$(python2 << __EOF__
+        import pytoml as toml
     with open('Cargo.toml', 'rb') as fin:
         obj = toml.load(fin)
 
