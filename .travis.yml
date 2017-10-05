@@ -25,7 +25,11 @@ before_script:
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     cargo install cargo-kcov
+    mkdir kcov
+    cd kcov
     cargo kcov --print-install-kcov-sh | sh
+    cd ${TRAVIS_BUILD_DIR}
+    rm -rf kcov
   fi
 
 script:
@@ -67,3 +71,5 @@ after_success:
 env:
   global:
     secure: qwMSXpdCryGDyfiy1lXEcR/kWhATlQGVNAqV83n9uBKDLP6WsX4C25zMAz1/0wkjiorBMNFGhxMLI956md7V84sLX+6FNfA0tRODtAnJYyjR3AX4RkXB6zFhbTqWg/2BAefJ7Y7Vy0qKLKbqFq6023lKg09Mk80fEReba4PisrMgfj3LCCUarAnxfuFnAB7LmlvWXHNd3w+x6dV8fxO0Zw6QoqB9wQQvQzIiApqWCTyoxQhW+qzo6bXrctPct/OGNhmf4I0l1QJBGPN6qpFrxSjFljbxqIBiagCb6k1WERpok2FiNjhXCowUhTMyaGIlZLaVLjuISu8+aCyHZqK/yQLIDwWm5iY3Ko1gUbhvcg3aQV2ovpN8nxrQaiEkhg8mUPDPG0NencibFItb510L/VK3UkBWgTcKmwMjsqErh/l3a6UvezSAkUHrkMMAGLSrKnveFXeGCTwePLN40NgqJzuKsaSL+gqlTP7dHVtWpsBIvmrK7x4ItwWGRETYQR9HJQbeX+bxQSDJRpkuSTmY1iFL6GF1R0SNRYjXIeZ8Ei8F6O0RqUl7sWjMf9KEWD1LVkWj3X8eM+lTLyNSzP9BGlTP/Q34oJ2LKc4lYj59NE5ai4/rzfz0p8/ANoEJxUJoYgkdl90jw90UltPEjxD7YeCJ8WVhB4tp72qV44RtlDA=
+
+cache: cargo
