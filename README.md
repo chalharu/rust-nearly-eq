@@ -5,3 +5,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/chalharu/rust-nearly-eq/badge.svg)](https://coveralls.io/github/chalharu/rust-nearly-eq)
 
 rust crate: nearly equal
+
+
+## If you are using the num-complex crate
+To depend on the `nearly_eq` crate with this feature enabled, put the following in
+your project's `Cargo.toml` file:
+
+```toml
+[dependencies.nearly_eq]
+features = ["num-complex"]
+version = ...  # Whichever version you are using
+```
