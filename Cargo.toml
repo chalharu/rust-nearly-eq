@@ -1,6 +1,6 @@
 [package]
 name = "nearly_eq"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Mitsuharu Seki <mitsu1986@gmail.com>"]
 repository = "https://github.com/chalharu/rust-nearly-eq"
 keywords = ["assert"]
@@ -13,3 +13,7 @@ documentation = "https://docs.rs/nearly_eq/"
 name = "nearly_eq"
 bench = false
 test = true
+
+[dependencies.num-complex]
+optional = true
+version = ">=0.0.0"

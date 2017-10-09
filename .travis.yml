@@ -46,17 +46,17 @@ before_script:
   fi
 
 script:
-- cargo build
+- cargo build --features=num-complex
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    cargo kcov --coveralls
+    cargo kcov --coveralls --features=num-complex
   else
-    cargo test
+    cargo test --features=num-complex
   fi
-- cargo test --release
+- cargo test --release --features=num-complex
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    cargo bench --verbose
+    cargo bench --verbose --features=num-complex
   fi
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
