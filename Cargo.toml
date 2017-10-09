@@ -13,3 +13,7 @@ documentation = "https://docs.rs/nearly_eq/"
 name = "nearly_eq"
 bench = false
 test = true
+
+[dependencies.num-complex]
+optional = true
+version = ">=0.0.0"

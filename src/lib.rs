@@ -5,8 +5,14 @@
 //! version 2.0 (the "License"). You can obtain a copy of the License at
 //! http://mozilla.org/MPL/2.0/.
 
+#[cfg(feature = "num-complex")]
+extern crate num_complex;
+
 #[macro_use]
 mod assert;
+
+#[cfg(feature = "num-complex")]
+mod complex;
 
 /// Trait for nearly equality comparisons.
 pub trait NearlyEq<Rhs: ?Sized = Self, Diff: ?Sized = Self> {
