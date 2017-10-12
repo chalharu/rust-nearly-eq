@@ -18,7 +18,7 @@ extern crate ndarray;
 mod assert;
 
 #[cfg(feature = "num-complex")]
-mod complex;
+mod complex_impl;
 
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
