@@ -6,11 +6,17 @@ extern crate num_complex;
 #[cfg(feature = "ndarray")]
 extern crate ndarray;
 
+#[cfg(feature = "num-rational")]
+extern crate num_rational;
+
 #[macro_use]
 extern crate nearly_eq;
 
 #[cfg(feature = "num-complex")]
 use num_complex::Complex;
+
+#[cfg(feature = "num-rational")]
+use num_rational::Rational;
 
 #[cfg(feature = "ndarray")]
 use ndarray::arr1;
@@ -109,7 +115,6 @@ fn bad_compare_with_array() {
     assert_nearly_eq!(left, right);
 }
 
-
 #[test]
 #[cfg(feature = "num-complex")]
 fn compare_with_complex() {
@@ -148,8 +153,8 @@ fn bad_compare_with_ndarray1d() {
 #[test]
 #[cfg(feature = "ndarray")]
 fn compare_with_ndarray2d() {
-    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
-    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0]]);
     assert_nearly_eq!(left, right);
 }
 
@@ -157,8 +162,8 @@ fn compare_with_ndarray2d() {
 #[should_panic]
 #[cfg(feature = "ndarray")]
 fn bad_compare_with_ndarray2d_val() {
-    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0001]]);
-    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0001]]);
+    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0]]);
     assert_nearly_eq!(left, right);
 }
 
@@ -166,16 +171,22 @@ fn bad_compare_with_ndarray2d_val() {
 #[should_panic]
 #[cfg(feature = "ndarray")]
 fn bad_compare_with_ndarray2d_len() {
-    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
-    let right = arr2(&[[1f64, 2.0],[ 3.0, 4.0],[ 5.0, 6.0],[ 7.0, 8.0],[ 9.0, 10.0]]);
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0], [6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let right = arr2(&[
+        [1f64, 2.0],
+        [3.0, 4.0],
+        [5.0, 6.0],
+        [7.0, 8.0],
+        [9.0, 10.0],
+    ]);
     assert_nearly_eq!(left, right);
 }
 
 #[test]
 #[cfg(feature = "ndarray")]
 fn compare_with_ndarray3d() {
-    let left = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
-    let right = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
+    let left = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0]]]);
+    let right = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0]]]);
     assert_nearly_eq!(left, right);
 }
 
@@ -183,8 +194,8 @@ fn compare_with_ndarray3d() {
 #[should_panic]
 #[cfg(feature = "ndarray")]
 fn bad_compare_with_ndarray3d() {
-    let left = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0001]]]);
-    let right = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
+    let left = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0001]]]);
+    let right = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0]]]);
     assert_nearly_eq!(left, right);
 }
 
@@ -212,3 +223,67 @@ type_impls! { i8 i16 i32 i64 u8 u16 u32 u64 }
 #[cfg(feature = "i128")]
 type_impls! { i128 u128 }
 
+#[test]
+fn compare_with_option_both_some() {
+    let left = Option::Some(0f64);
+    let right = Option::Some(1e-12);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_option_both_none() {
+    let left: Option<f64> = Option::None;
+    let right = Option::None;
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_both_some() {
+    let left = Option::Some(0f64);
+    let right = Option::Some(1f64);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_left_some() {
+    let left = Option::Some(0f64);
+    let right = Option::None;
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_right_some() {
+    let left: Option<f64> = Option::None;
+    let right = Option::Some(0f64);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[cfg(feature = "num-rational")]
+fn compare_with_ratio_mindiff() {
+    let left = Rational::new(1, 1000);
+    let right = Rational::new(1, 1001);
+    let eps = Rational::new(1, 10000);
+    assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+#[cfg(feature = "num-rational")]
+fn compare_with_ratio_equal() {
+    let left = Rational::new(1, 1000);
+    let right = Rational::new(1, 1000);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "num-rational")]
+fn bad_compare_with_ratio() {
+    let left = Rational::new(1, 1000);
+    let right = Rational::new(1, 1001);
+    let eps = Rational::new(1, 1000000000);
+    assert_nearly_eq!(left, right, eps);
+}
