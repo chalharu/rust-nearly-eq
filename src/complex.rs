@@ -6,6 +6,7 @@
 use num_complex::Complex;
 use NearlyEq;
 
+#[cfg_attr(feature = "docs", stable(feature = "num-complex", since = "0.1.2"))]
 impl<A, B, C: NearlyEq<A, B>> NearlyEq<Complex<A>, B> for Complex<C> {
     fn eps() -> B {
         C::eps()
