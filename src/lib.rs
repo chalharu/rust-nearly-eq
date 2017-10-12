@@ -4,6 +4,23 @@
 //! This Source Code is subject to the terms of the Mozilla Public License
 //! version 2.0 (the "License"). You can obtain a copy of the License at
 //! http://mozilla.org/MPL/2.0/.
+//!
+//! # Examples
+//!
+//! ```rust
+//! # #[macro_use] extern crate nearly_eq;
+//! # fn main() {
+//! assert_nearly_eq!(1f64, 1.5f64, 0.6f64); // does not panic
+//! assert_nearly_eq!(0f64, 1e-12f64); // does not panic
+//! # }
+//! ```
+//! ```should_panic
+//! # #[macro_use] extern crate nearly_eq;
+//! # fn main() {
+//! assert_nearly_eq!(1f64, 2f64); // panics
+//! # }
+//! ```
+
 #![cfg_attr(feature = "docs", feature(staged_api))]
 #![cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
 #![cfg_attr(feature = "i128", feature(i128_type))]

@@ -1,13 +1,24 @@
 # rust-nearly-eq
 [![crates.io badge](https://img.shields.io/crates/v/nearly-eq.svg)](https://crates.io/crates/nearly-eq)
-[![Build Status](https://travis-ci.org/chalharu/rust-nearly-eq.svg)](https://travis-ci.org/chalharu/rust-nearly-eq)
+[![Build Status](https://travis-ci.org/chalharu/rust-nearly-eq.svg?branch=master)](https://travis-ci.org/chalharu/rust-nearly-eq)
 [![docs.rs](https://docs.rs/nearly_eq/badge.svg)](https://docs.rs/nearly_eq)
-[![Coverage Status](https://coveralls.io/repos/github/chalharu/rust-nearly-eq/badge.svg)](https://coveralls.io/github/chalharu/rust-nearly-eq)
+[![Coverage Status](https://coveralls.io/repos/github/chalharu/rust-nearly-eq/badge.svg?branch=master)](https://coveralls.io/github/chalharu/rust-nearly-eq?branch=master)
 
-rust crate: nearly equal
+Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly equal to each other.
 
 ## How-to Use
 See the [crate documentation](https://docs.rs/nearly_eq/) for more details.
+
+### Examples
+
+```rust
+assert_nearly_eq!(1f64, 1.5f64, 0.6f64); // does not panic
+assert_nearly_eq!(0f64, 1e-12f64); // does not panic
+```
+
+```rust:should_panic
+assert_nearly_eq!(1f64, 2f64); // panics
+```
 
 ### Optional Features
 
