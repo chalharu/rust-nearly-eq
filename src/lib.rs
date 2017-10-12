@@ -1,15 +1,44 @@
 //! Trait for nearly equality comparisons.
 //!
+//! # Overview
+//! Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly equal to each other.
+//!
 //! # Licensing
 //! This Source Code is subject to the terms of the Mozilla Public License
 //! version 2.0 (the "License"). You can obtain a copy of the License at
 //! http://mozilla.org/MPL/2.0/.
+//!
+//! # Examples
+//!
+//! ```rust
+//! # #[macro_use] extern crate nearly_eq;
+//! # fn main() {
+//! assert_nearly_eq!(1f64, 1.5f64, 0.6f64); // does not panic
+//! assert_nearly_eq!(0f64, 1e-12f64); // does not panic
+//! # }
+//! ```
+//! ```should_panic
+//! # #[macro_use] extern crate nearly_eq;
+//! # fn main() {
+//! assert_nearly_eq!(1f64, 2f64); // panics
+//! # }
+//! ```
+
 #![cfg_attr(feature = "docs", feature(staged_api))]
 #![cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
 #![cfg_attr(feature = "i128", feature(i128_type))]
 
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
+
+#[cfg(feature = "num-rational")]
+extern crate num_rational;
+
+#[cfg(feature = "num-integer")]
+extern crate num_integer;
+
+#[cfg(feature = "num-traits")]
+extern crate num_traits;
 
 #[cfg(feature = "ndarray")]
 extern crate ndarray;
@@ -18,7 +47,12 @@ extern crate ndarray;
 mod assert;
 
 #[cfg(feature = "num-complex")]
-mod complex;
+mod complex_impl;
+
+#[cfg(feature = "num-traits")]
+#[cfg(feature = "num-rational")]
+#[cfg(feature = "num-integer")]
+mod rational_impl;
 
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
