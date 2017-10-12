@@ -1,5 +1,8 @@
 //! Trait for nearly equality comparisons.
 //!
+//! # Overview
+//! Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly equal to each other.
+//!
 //! # Licensing
 //! This Source Code is subject to the terms of the Mozilla Public License
 //! version 2.0 (the "License"). You can obtain a copy of the License at
