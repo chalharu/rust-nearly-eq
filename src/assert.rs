@@ -24,6 +24,7 @@
 /// # }
 /// ```
 #[macro_export]
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
 macro_rules! assert_nearly_eq {
     ($a:expr, $b:expr) => ({
         let (a, b) = (&$a, &$b);

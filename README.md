@@ -6,13 +6,13 @@
 
 rust crate: nearly equal
 
+## How-to Use
+See the [crate documentation](https://docs.rs/nearly_eq/) for more details.
 
-## If you are using the num-complex crate
-To depend on the `nearly_eq` crate with this feature enabled, put the following in
-your project's `Cargo.toml` file:
+### Optional Features
 
-```toml
-[dependencies.nearly_eq]
-features = ["num-complex"]
-version = ...  # Whichever version you are using
-```
+- **`num-complex`** - Implement `NearlyEq` traits for `num_complex::Complex`. This adds a dependency on the `num-complex` crate.
+
+- **`ndarray`** - Implement `NearlyEq` traits for `ndarray::ArrayBase`. This adds a dependency on the `ndarray` crate.
+
+- **`i128`** - Implement `NearlyEq` traits for `i128` and `u128`. **Available only on Rust nightly channel.**
