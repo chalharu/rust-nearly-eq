@@ -11,6 +11,15 @@
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
 
+#[cfg(feature = "num-rational")]
+extern crate num_rational;
+
+#[cfg(feature = "num-integer")]
+extern crate num_integer;
+
+#[cfg(feature = "num-traits")]
+extern crate num_traits;
+
 #[cfg(feature = "ndarray")]
 extern crate ndarray;
 
@@ -19,6 +28,11 @@ mod assert;
 
 #[cfg(feature = "num-complex")]
 mod complex_impl;
+
+#[cfg(feature = "num-traits")]
+#[cfg(feature = "num-rational")]
+#[cfg(feature = "num-integer")]
+mod rational_impl;
 
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;

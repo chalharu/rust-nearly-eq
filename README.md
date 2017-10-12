@@ -13,6 +13,8 @@ See the [crate documentation](https://docs.rs/nearly_eq/) for more details.
 
 - **`num-complex`** - Implement `NearlyEq` traits for `num_complex::Complex`. This adds a dependency on the `num-complex` crate.
 
+- **`rational`** - Implement `NearlyEq` traits for `num_rational::Ratio`. This adds a dependency on the `num-rational` crate.
+
 - **`ndarray`** - Implement `NearlyEq` traits for `ndarray::ArrayBase`. This adds a dependency on the `ndarray` crate.
 
 - **`i128`** - Implement `NearlyEq` traits for `i128` and `u128`. **Available only on Rust nightly channel.**
