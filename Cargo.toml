@@ -35,9 +35,8 @@ optional = true
 version = ">=0.0.0"
 
 [features]
-nightly = []
 docs = ["num-complex", "rational", "ndarray", "i128"]
-i128 = ["nightly"]
+i128 = []
 rational = ["num-rational", "num-integer", "num-traits"]
 
 [badges]
