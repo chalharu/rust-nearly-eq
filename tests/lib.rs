@@ -1,11 +1,25 @@
+#![cfg_attr(feature = "i128", feature(i128_type))]
+
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
+
+#[cfg(feature = "ndarray")]
+extern crate ndarray;
 
 #[macro_use]
 extern crate nearly_eq;
 
 #[cfg(feature = "num-complex")]
 use num_complex::Complex;
+
+#[cfg(feature = "ndarray")]
+use ndarray::arr1;
+
+#[cfg(feature = "ndarray")]
+use ndarray::arr2;
+
+#[cfg(feature = "ndarray")]
+use ndarray::arr3;
 
 #[test]
 fn it_should_not_panic_if_values_are_nearly_equal() {
@@ -112,3 +126,89 @@ fn bad_compare_with_complex() {
     let right = Complex::new(1.0f64, 1e-8);
     assert_nearly_eq!(left, right);
 }
+
+#[test]
+#[cfg(feature = "ndarray")]
+fn compare_with_ndarray1d() {
+    let left = arr1(&[1f64, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]);
+    let right = arr1(&[1f64, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarray1d() {
+    let left = arr1(&[1f64, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0001]);
+    let right = arr1(&[1f64, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]);
+    assert_nearly_eq!(left, right);
+}
+
+
+#[test]
+#[cfg(feature = "ndarray")]
+fn compare_with_ndarray2d() {
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarray2d_val() {
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0001]]);
+    let right = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarray2d_len() {
+    let left = arr2(&[[1f64, 2.0, 3.0, 4.0, 5.0],[ 6.0, 7.0, 8.0, 9.0, 10.0]]);
+    let right = arr2(&[[1f64, 2.0],[ 3.0, 4.0],[ 5.0, 6.0],[ 7.0, 8.0],[ 9.0, 10.0]]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[cfg(feature = "ndarray")]
+fn compare_with_ndarray3d() {
+    let left = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
+    let right = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarray3d() {
+    let left = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0001]]]);
+    let right = arr3(&[[[1f64, 2.0],[ 4.0, 5.0]],[[ 6.0, 7.0],[ 9.0, 10.0]]]);
+    assert_nearly_eq!(left, right);
+}
+
+macro_rules! type_impls {
+    ($($T:ident)+) => {
+        $(
+            mod $T {
+                #[test]
+                fn it_should_not_panic_if_values_are_nearly_equal() {
+                    assert_nearly_eq!(0 as $T, 0 as $T);
+                }
+
+                #[test]
+                #[should_panic]
+                fn it_should_panic_if_values_are_not_nearly_equal() {
+                    assert_nearly_eq!(0 as $T, 1 as $T);
+                }
+            }
+        )+
+    }
+}
+
+type_impls! { i8 i16 i32 i64 u8 u16 u32 u64 }
+
+#[cfg(feature = "i128")]
+type_impls! { i128 u128 }
+
