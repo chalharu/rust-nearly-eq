@@ -225,11 +225,19 @@ type_impls! { i128 u128 }
 
 #[test]
 #[cfg(feature = "num-rational")]
-fn compare_with_ratio() {
+fn compare_with_ratio_mindiff() {
     let left = Rational::new(1, 1000);
     let right = Rational::new(1, 1001);
     let eps = Rational::new(1, 10000);
     assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+#[cfg(feature = "num-rational")]
+fn compare_with_ratio_equal() {
+    let left = Rational::new(1, 1000);
+    let right = Rational::new(1, 1000);
+    assert_nearly_eq!(left, right);
 }
 
 #[test]
