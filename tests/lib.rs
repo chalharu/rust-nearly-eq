@@ -212,3 +212,40 @@ type_impls! { i8 i16 i32 i64 u8 u16 u32 u64 }
 #[cfg(feature = "i128")]
 type_impls! { i128 u128 }
 
+#[test]
+fn compare_with_option_both_some() {
+    let left = Option::Some(0f64);
+    let right = Option::Some(1e-12);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_option_both_none() {
+    let left: Option<f64> = Option::None;
+    let right = Option::None;
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_both_some() {
+    let left = Option::Some(0f64);
+    let right = Option::Some(1f64);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_left_some() {
+    let left = Option::Some(0f64);
+    let right = Option::None;
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_option_right_some() {
+    let left: Option<f64> = Option::None;
+    let right = Option::Some(0f64);
+    assert_nearly_eq!(left, right);
+}

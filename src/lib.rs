@@ -221,3 +221,18 @@ array_impls! {
     20 21 22 23 24 25 26 27 28 29
     30 31 32
 }
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.1"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Option<A>, B> for Option<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Option<A>, eps: &B) -> bool {
+            match (self, other) {
+                (&None, &None) => return true,
+                (&None, _) | (_, &None) => return false,
+                (&Some(ref x), &Some(ref y)) => x.eq(y, eps),
+            }
+    }
+}
