@@ -19,13 +19,7 @@ use num_complex::Complex;
 use num_rational::Rational;
 
 #[cfg(feature = "ndarray")]
-use ndarray::arr1;
-
-#[cfg(feature = "ndarray")]
-use ndarray::arr2;
-
-#[cfg(feature = "ndarray")]
-use ndarray::arr3;
+use ndarray::{arr1, arr2, arr3, ArrayD, IxDyn};
 
 #[test]
 fn it_should_not_panic_if_values_are_nearly_equal() {
@@ -196,6 +190,15 @@ fn compare_with_ndarray3d() {
 fn bad_compare_with_ndarray3d() {
     let left = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0001]]]);
     let right = arr3(&[[[1f64, 2.0], [4.0, 5.0]], [[6.0, 7.0], [9.0, 10.0]]]);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarraynd() {
+    let left = ArrayD::<f64>::zeros(IxDyn(&[2, 3, 4, 5, 6, 7]));
+    let right = ArrayD::<f64>::zeros(IxDyn(&[2, 3, 4, 5, 6]));
     assert_nearly_eq!(left, right);
 }
 
