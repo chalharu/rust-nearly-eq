@@ -57,6 +57,10 @@ mod rational_impl;
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
 
+use std::rc::{Rc, Weak};
+
+use std::sync::Arc;
+
 /// Trait for nearly equality comparisons.
 #[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
 pub trait NearlyEq<Rhs: ?Sized = Self, Diff: ?Sized = Self> {
@@ -270,3 +274,37 @@ impl<A, B, C: NearlyEq<A, B>> NearlyEq<Option<A>, B> for Option<C> {
             }
     }
 }
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Rc<A>, B> for Rc<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Rc<A>, eps: &B) -> bool {
+        self.as_ref().eq(other, eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Arc<A>, B> for Arc<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Arc<A>, eps: &B) -> bool {
+        self.as_ref().eq(other, eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Weak<A>, B> for Weak<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Weak<A>, eps: &B) -> bool {
+        self.upgrade().eq(&other.upgrade(), eps)
+    }
+}
+
