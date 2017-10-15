@@ -1,7 +1,7 @@
 //! Trait for nearly equality comparisons.
 //!
 //! # Overview
-//! Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly equal to each other.
+//! Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly(approximately) equal to each other.
 //!
 //! # Licensing
 //! This Source Code is subject to the terms of the Mozilla Public License
@@ -57,17 +57,23 @@ mod rational_impl;
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
 
-/// Trait for nearly equality comparisons.
+use std::rc::{Rc, Weak};
+
+use std::sync::Arc;
+
+use std::cell::{Cell, RefCell};
+
+/// Trait for nearly(approximately) equality comparisons.
 #[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
 pub trait NearlyEq<Rhs: ?Sized = Self, Diff: ?Sized = Self> {
     #[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
     fn eps() -> Diff;
 
-    /// This method tests for self and other values to be nearly equal.
+    /// This method tests for self and other values to be nearly(approximately) equal.
     #[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
     fn eq(&self, other: &Rhs, eps: &Diff) -> bool;
 
-    /// This method tests for not nearly equal.
+    /// This method tests for not nearly(approximately) equal.
     #[inline]
     #[cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
     fn ne(&self, other: &Rhs, eps: &Diff) -> bool {
@@ -270,3 +276,59 @@ impl<A, B, C: NearlyEq<A, B>> NearlyEq<Option<A>, B> for Option<C> {
             }
     }
 }
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Rc<A>, B> for Rc<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Rc<A>, eps: &B) -> bool {
+        self.as_ref().eq(other, eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Arc<A>, B> for Arc<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Arc<A>, eps: &B) -> bool {
+        self.as_ref().eq(other, eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A, B, C: NearlyEq<A, B>> NearlyEq<Weak<A>, B> for Weak<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Weak<A>, eps: &B) -> bool {
+        self.upgrade().eq(&other.upgrade(), eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A: Copy + ?Sized, B, C: NearlyEq<A, B> +  Copy + ?Sized> NearlyEq<Cell<A>, B> for Cell<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &Cell<A>, eps: &B) -> bool {
+        (*self).get().eq(&(*other).get(), eps)
+    }
+}
+
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.2"))]
+impl<A: ?Sized, B, C: NearlyEq<A, B> + ?Sized> NearlyEq<RefCell<A>, B> for RefCell<C> {
+    fn eps() -> B {
+        C::eps()
+    }
+
+    fn eq(&self, other: &RefCell<A>, eps: &B) -> bool {
+        (*self).borrow().eq(&(*other).borrow(), eps)
+    }
+}
+
