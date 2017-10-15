@@ -21,6 +21,10 @@ use num_rational::Rational;
 #[cfg(feature = "ndarray")]
 use ndarray::{arr1, arr2, arr3, ArrayD, IxDyn};
 
+use std::rc::Rc;
+
+use std::sync::Arc;
+
 #[test]
 fn it_should_not_panic_if_values_are_nearly_equal() {
     assert_nearly_eq!(8f32, 8f32 + 1e-7);
@@ -289,4 +293,49 @@ fn bad_compare_with_ratio() {
     let right = Rational::new(1, 1001);
     let eps = Rational::new(1, 1000000000);
     assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+fn compare_with_rc() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_rc() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.00001);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_arc() {
+    let left = Arc::new(1.0);
+    let right = Arc::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_arc() {
+    let left = Arc::new(1.0);
+    let right = Arc::new(1.00001);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_weak() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.0);
+    assert_nearly_eq!(Rc::downgrade(&left), Rc::downgrade(&right));
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_weak() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.00001);
+    assert_nearly_eq!(Rc::downgrade(&left), Rc::downgrade(&right));
 }
