@@ -3,7 +3,7 @@
 //! version 2.0 (the "License"). You can obtain a copy of the License at
 //! http://mozilla.org/MPL/2.0/.
 
-/// Asserts that two expressions are nearly equal to each other.
+/// Asserts that two expressions are nearly(approximately) equal to each other.
 ///
 /// You can optionally add an optional diff value. If you don't supply
 ///  a diff value as an argument, NearlyEq::eps() is the default used.
