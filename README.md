@@ -4,7 +4,7 @@
 [![docs.rs](https://docs.rs/nearly_eq/badge.svg)](https://docs.rs/nearly_eq)
 [![Coverage Status](https://coveralls.io/repos/github/chalharu/rust-nearly-eq/badge.svg?branch=master)](https://coveralls.io/github/chalharu/rust-nearly-eq?branch=master)
 
-Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly equal to each other.
+Implementing the `NearlyEq` traits, Can asserts that the two expressions are nearly(approximately) equal to each other.
 
 ## How-to Use
 See the [crate documentation](https://docs.rs/nearly_eq/) for more details.

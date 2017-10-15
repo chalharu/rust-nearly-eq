@@ -19,13 +19,13 @@ use num_complex::Complex;
 use num_rational::Rational;
 
 #[cfg(feature = "ndarray")]
-use ndarray::arr1;
+use ndarray::{ArrayD, IxDyn, arr1, arr2, arr3};
 
-#[cfg(feature = "ndarray")]
-use ndarray::arr2;
+use std::rc::Rc;
 
-#[cfg(feature = "ndarray")]
-use ndarray::arr3;
+use std::sync::Arc;
+
+use std::cell::{Cell, RefCell};
 
 #[test]
 fn it_should_not_panic_if_values_are_nearly_equal() {
@@ -199,6 +199,15 @@ fn bad_compare_with_ndarray3d() {
     assert_nearly_eq!(left, right);
 }
 
+#[test]
+#[should_panic]
+#[cfg(feature = "ndarray")]
+fn bad_compare_with_ndarraynd() {
+    let left = ArrayD::<f64>::zeros(IxDyn(&[2, 3, 4, 5, 6, 7]));
+    let right = ArrayD::<f64>::zeros(IxDyn(&[2, 3, 4, 5, 6]));
+    assert_nearly_eq!(left, right);
+}
+
 macro_rules! type_impls {
     ($($T:ident)+) => {
         $(
@@ -286,4 +295,79 @@ fn bad_compare_with_ratio() {
     let right = Rational::new(1, 1001);
     let eps = Rational::new(1, 1000000000);
     assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+fn compare_with_rc() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_rc() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.00001);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_arc() {
+    let left = Arc::new(1.0);
+    let right = Arc::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_arc() {
+    let left = Arc::new(1.0);
+    let right = Arc::new(1.00001);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_weak() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.0);
+    assert_nearly_eq!(Rc::downgrade(&left), Rc::downgrade(&right));
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_weak() {
+    let left = Rc::new(1.0);
+    let right = Rc::new(1.00001);
+    assert_nearly_eq!(Rc::downgrade(&left), Rc::downgrade(&right));
+}
+
+#[test]
+fn compare_with_cell() {
+    let left = Cell::new(1.0);
+    let right = Cell::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_cell() {
+    let left = Cell::new(1.0);
+    let right = Cell::new(1.00001);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+fn compare_with_refcell() {
+    let left = RefCell::new(1.0);
+    let right = RefCell::new(1.0);
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+fn bad_compare_with_refcell() {
+    let left = RefCell::new(1.0);
+    let right = RefCell::new(1.00001);
+    assert_nearly_eq!(left, right);
 }
