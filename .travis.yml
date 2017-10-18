@@ -48,9 +48,9 @@ before_script:
   fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    export FEATURES="num-complex rational ndarray i128"
+    export FEATURES="complex rational ndarray i128"
   else
-    export FEATURES="num-complex rational ndarray"
+    export FEATURES="complex rational ndarray"
   fi
 
 script:
@@ -58,10 +58,13 @@ script:
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     cargo kcov --coveralls --features="$FEATURES"
+    RUSTFLAGS='-C debug-assertions' cargo kcov --features="$FEATURES"
   else
     cargo test --features="$FEATURES"
+    RUSTFLAGS='-C debug-assertions' cargo test --features="$FEATURES"
   fi
 - cargo test --release --features="$FEATURES"
+- RUSTFLAGS='-C debug-assertions' cargo test --release --features="$FEATURES"
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
     cargo bench --verbose --features="$FEATURES"
@@ -96,4 +99,3 @@ cache:
   cargo: true
   apt: true
   pip: true
-
