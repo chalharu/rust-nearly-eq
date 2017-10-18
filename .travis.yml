@@ -64,13 +64,8 @@ script:
     RUSTFLAGS='-C debug-assertions=on' cargo test --features="$FEATURES"
   fi
 - |
-  if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    RUSTFLAGS='-C debug-assertions=off' cargo kcov --release --coveralls --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo kcov --release --coveralls --features="$FEATURES"
-  else
-    RUSTFLAGS='-C debug-assertions=off' cargo test --release --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo test --release --features="$FEATURES"
-  fi
+  RUSTFLAGS='-C debug-assertions=off' cargo test --release --features="$FEATURES"
+  RUSTFLAGS='-C debug-assertions=on' cargo test --release --features="$FEATURES"
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
     cargo bench --verbose --features="$FEATURES"
