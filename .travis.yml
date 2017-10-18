@@ -58,7 +58,7 @@ script:
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     cargo kcov --coveralls --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions' cargo kcov --features="$FEATURES"
+    RUSTFLAGS='-C debug-assertions' cargo kcov --coveralls --features="$FEATURES"
   else
     cargo test --features="$FEATURES"
     RUSTFLAGS='-C debug-assertions' cargo test --features="$FEATURES"
