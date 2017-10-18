@@ -371,3 +371,34 @@ fn bad_compare_with_refcell() {
     let right = RefCell::new(1.00001);
     assert_nearly_eq!(left, right);
 }
+
+#[test]
+#[cfg(debug_assertions)]
+fn it_should_not_panic_if_values_are_nearly_equal_debug() {
+    debug_assert_nearly_eq!(8f32, 8f32 + 1e-7);
+}
+
+#[test]
+#[cfg(debug_assertions)]
+fn it_should_not_panic_if_values_are_nearly_equal_f64_debug() {
+    debug_assert_nearly_eq!(0f64, 1e-12 as f64);
+}
+
+#[test]
+#[cfg(debug_assertions)]
+#[should_panic]
+fn it_should_panic_if_values_are_not_nearly_equal_debug() {
+    debug_assert_nearly_eq!(8f32, 8f32 - 1e-5);
+}
+
+#[test]
+#[cfg(debug_assertions)]
+fn compare_with_explicit_eps_debug() {
+    debug_assert_nearly_eq!(3f64, 4f64, 2f64);
+}
+
+#[test]
+#[cfg(not(debug_assertions))]
+fn it_should_panic_if_values_are_not_nearly_equal_debug() {
+    debug_assert_nearly_eq!(8f32, 8f32 - 1e-5);
+}

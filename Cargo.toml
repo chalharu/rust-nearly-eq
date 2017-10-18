@@ -1,6 +1,6 @@
 [package]
 name = "nearly_eq"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Mitsuharu Seki <mitsu1986@gmail.com>"]
 repository = "https://github.com/chalharu/rust-nearly-eq"
 keywords = ["assert", "array"]
@@ -35,9 +35,10 @@ optional = true
 version = ">=0.0.0"
 
 [features]
-docs = ["num-complex", "rational", "ndarray", "i128"]
+docs = ["complex", "rational", "ndarray", "i128"]
 i128 = []
 rational = ["num-rational", "num-integer", "num-traits"]
+complex = ["num-complex"]
 
 [badges]
 travis-ci = { repository = "chalharu/rust-nearly-eq" }
