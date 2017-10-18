@@ -47,3 +47,32 @@ macro_rules! assert_nearly_eq {
                  *a, *b, $eps);
     })
 }
+
+/// Asserts that two expressions are nearly(approximately) equal to each other.
+///
+/// You can optionally add an optional diff value. If you don't supply
+///  a diff value as an argument, NearlyEq::eps() is the default used.
+///
+/// Unlike assert_nearly_eq!, debug_assert_nearly_eq! statements are only enabled in non optimized builds by default.
+/// An optimized build will omit all debug_assert_nearly_eq! statements unless -C debug-assertions is passed to the compiler.
+///
+/// # Examples
+///
+/// ```rust
+/// # #[macro_use] extern crate nearly_eq;
+/// # fn main() {
+/// debug_assert_nearly_eq!(1f64, 1.5f64, 0.6f64); // does not panic
+/// debug_assert_nearly_eq!(0f64, 1e-12f64); // does not panic
+/// # }
+/// ```
+/// ```should_panic
+/// # #[macro_use] extern crate nearly_eq;
+/// # fn main() {
+/// debug_assert_nearly_eq!(1f64, 2f64); // panics
+/// # }
+/// ```
+#[macro_export]
+#[cfg_attr(feature = "docs", stable(feature = "default", since = "0.2.3"))]
+macro_rules! debug_assert_nearly_eq {
+    ($($arg:tt)*) => (if cfg!(debug_assertions) { assert_nearly_eq!($($arg)*); })
+}
