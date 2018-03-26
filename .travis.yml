@@ -38,9 +38,9 @@ before_script:
   fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    export FEATURES="complex rational ndarray i128"
+    export FEATURES="complex rational ndarray fpa i128"
   else
-    export FEATURES="complex rational ndarray"
+    export FEATURES="complex rational ndarray fpa"
   fi
 - cargo install cargo-update || echo "cargo-update already installed"
 - cargo install cargo-travis || echo "cargo-travis already installed"
