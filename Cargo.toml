@@ -1,24 +1,36 @@
 [package]
-name = "nearly_eq"
-version = "0.2.3"
 authors = ["Mitsuharu Seki <mitsu1986@gmail.com>"]
-repository = "https://github.com/chalharu/rust-nearly-eq"
-keywords = ["assert", "array"]
-license = "MPL-2.0"
-readme = "README.md"
 description = "Nearly(Approximately) equal traits and assertion"
 documentation = "https://docs.rs/nearly_eq/"
-
-[lib]
+keywords = [
+    "assert",
+    "array",
+]
+license = "MPL-2.0"
 name = "nearly_eq"
-bench = false
-test = true
+readme = "README.md"
+repository = "https://github.com/chalharu/rust-nearly-eq"
+version = "0.2.3"
 
-[dependencies.num-complex]
+[metadata.docs.rs]
+features = ["docs"]
+
+[badges.travis-ci]
+repository = "chalharu/rust-nearly-eq"
+
+[dependencies.typenum]
+optional = true
+version = ">=1.10.0"
+
+[dependencies.fpa]
+optional = true
+version = ">=0.1.0"
+
+[dependencies.ndarray]
 optional = true
 version = ">=0.0.0"
 
-[dependencies.num-rational]
+[dependencies.num-complex]
 optional = true
 version = ">=0.0.0"
 
@@ -26,22 +38,31 @@ version = ">=0.0.0"
 optional = true
 version = ">=0.0.0"
 
+[dependencies.num-rational]
+optional = true
+version = ">=0.0.0"
+
 [dependencies.num-traits]
 optional = true
 version = ">=0.0.0"
 
-[dependencies.ndarray]
-optional = true
-version = ">=0.0.0"
-
 [features]
-docs = ["complex", "rational", "ndarray", "i128"]
-i128 = []
-rational = ["num-rational", "num-integer", "num-traits"]
 complex = ["num-complex"]
+docs = [
+    "complex",
+    "rational",
+    "ndarray",
+    "i128",
+]
+i128 = []
+rational = [
+    "num-rational",
+    "num-integer",
+    "num-traits",
+]
+fixed-point = ["fpa", "typenum", "num-traits"]
 
-[badges]
-travis-ci = { repository = "chalharu/rust-nearly-eq" }
-
-[package.metadata.docs.rs]
-features = ["docs"]
+[lib]
+bench = false
+name = "nearly_eq"
+test = true
