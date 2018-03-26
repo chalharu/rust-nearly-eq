@@ -10,7 +10,7 @@ license = "MPL-2.0"
 name = "nearly_eq"
 readme = "README.md"
 repository = "https://github.com/chalharu/rust-nearly-eq"
-version = "0.2.3"
+version = "0.2.4"
 
 [metadata.docs.rs]
 features = ["docs"]
@@ -52,6 +52,7 @@ docs = [
     "complex",
     "rational",
     "ndarray",
+    "fpa",
     "i128",
 ]
 i128 = []
