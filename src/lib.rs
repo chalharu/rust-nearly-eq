@@ -43,6 +43,12 @@ extern crate num_traits;
 #[cfg(feature = "ndarray")]
 extern crate ndarray;
 
+#[cfg(feature = "fpa")]
+extern crate fpa;
+
+#[cfg(feature = "typenum")]
+extern crate typenum;
+
 #[macro_use]
 mod assert;
 
@@ -56,6 +62,9 @@ mod rational_impl;
 
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
+
+#[cfg(feature = "fpa")]
+mod fpa_impl;
 
 use std::rc::{Rc, Weak};
 
@@ -331,4 +340,3 @@ impl<A: ?Sized, B, C: NearlyEq<A, B> + ?Sized> NearlyEq<RefCell<A>, B> for RefCe
         (*self).borrow().eq(&(*other).borrow(), eps)
     }
 }
-
