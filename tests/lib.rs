@@ -1,5 +1,3 @@
-#![cfg_attr(feature = "i128", feature(i128_type))]
-
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
 
