@@ -52,7 +52,7 @@ docs = [
     "complex",
     "rational",
     "ndarray",
-    "fpa",
+    "use_fpa",
     "i128",
 ]
 i128 = []
