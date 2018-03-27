@@ -5,7 +5,7 @@ rust:
 - beta
 - nightly
 
-sudo: false
+sudo: true
 
 os:
 - linux
@@ -22,22 +22,12 @@ addons:
     - libdw-dev
     - binutils-dev
     - libiberty-dev
+    - cmake
 
 before_script:
 - |
   if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
     export PATH=$HOME/Library/Python/2.7/bin:$PATH
-  fi
-- |
-  if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    cargo install cargo-kcov
-    if [ ! -x $HOME/.cargo/bin/kcov ] || [ ! -f $HOME/.cargo/bin/kcov ]; then
-      mkdir kcov
-      cd kcov
-      cargo kcov --print-install-kcov-sh | sh
-      cd ${TRAVIS_BUILD_DIR}
-      rm -rf kcov
-    fi
   fi
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
@@ -48,20 +38,29 @@ before_script:
   fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    export FEATURES="complex rational ndarray i128"
+    export FEATURES="complex rational ndarray use_fpa i128"
   else
-    export FEATURES="complex rational ndarray"
+    export FEATURES="complex rational ndarray use_fpa"
   fi
+- cargo install cargo-update || echo "cargo-update already installed"
+- cargo install cargo-travis || echo "cargo-travis already installed"
+- cargo install-update -a || true # update outdated cached binaries
+
 
 script:
 - cargo build --features="$FEATURES"
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    cargo kcov --coveralls --features="$FEATURES"
+    cargo coveralls --features="$FEATURES" || cargo test --features="$FEATURES"
   else
     cargo test --features="$FEATURES"
   fi
-- cargo test --release --features="$FEATURES"
+- |
+  if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    cargo coveralls --release --features="$FEATURES" || cargo test --release --features="$FEATURES"
+  else
+    cargo test --release --features="$FEATURES"
+  fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
     cargo bench --verbose --features="$FEATURES"
@@ -83,7 +82,9 @@ after_success:
   if [ "${TRAVIS_OS_NAME}" = "linux" ] &&
      [ "${TRAVIS_RUST_VERSION}" = "stable" ] &&
      [ "${TRAVIS_BRANCH}" = "master" ] &&
-     [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+     [ "${TRAVIS_PULL_REQUEST}" = "false" ] &&
+     [ "${RUSTFLAGS}"="-C debug-assertions=off" ] &&
+     [ "${TRAVIS_EVENT_TYPE}" = "push" ]; then
     git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages &&
     cargo publish
   fi
