@@ -28,6 +28,8 @@ assert_nearly_eq!(1f64, 2f64); // panics
 
 - **`rational`** - Implement `NearlyEq` traits for `num_rational::Ratio`. This adds a dependency on the `num-rational` crate.
 
+- **`ndarray`** - Implement `NearlyEq` traits for `ndarray::ArrayBase`. This adds a dependency on the `ndarray` crate.
+
 - **`use_fpa`** - Implement `NearlyEq` traits for fixed-point types of ['fpa'](https://crates.io/crates/fpa) crate.
 
 - **`i128`** - Implement `NearlyEq` traits for `i128` and `u128`. **Available only on Rust nightly channel.**
