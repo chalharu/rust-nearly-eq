@@ -26,6 +26,7 @@
 
 #![cfg_attr(feature = "docs", feature(staged_api))]
 #![cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
+#![cfg_attr(feature = "docs", feature(i128_type))]
 
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
