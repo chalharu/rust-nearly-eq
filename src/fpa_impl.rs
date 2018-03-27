@@ -13,6 +13,7 @@ use NearlyEq;
 
 macro_rules! impl_fpa {
     ($bits:ident, $limit:ident) => {
+        #[cfg_attr(feature = "docs", stable(feature = "fpa", since = "0.2.4"))]
         impl<FRAC> NearlyEq<Q<$bits, FRAC>, Q<$bits, FRAC>> for Q<$bits, FRAC>
         where
             FRAC: Cmp<U0, Output = Greater> + Cmp<$limit, Output = Less> + Unsigned,

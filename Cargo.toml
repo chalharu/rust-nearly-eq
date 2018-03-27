@@ -12,7 +12,7 @@ readme = "README.md"
 repository = "https://github.com/chalharu/rust-nearly-eq"
 version = "0.2.4"
 
-[metadata.docs.rs]
+[package.metadata.docs.rs]
 features = ["docs"]
 
 [badges.travis-ci]
@@ -59,6 +59,11 @@ i128 = []
 rational = [
     "num-rational",
     "num-integer",
+    "num-traits",
+]
+use_fpa = [
+    "fpa",
+    "typenum",
     "num-traits",
 ]
 
