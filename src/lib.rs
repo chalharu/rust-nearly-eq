@@ -6,7 +6,7 @@
 //! # Licensing
 //! This Source Code is subject to the terms of the Mozilla Public License
 //! version 2.0 (the "License"). You can obtain a copy of the License at
-//! http://mozilla.org/MPL/2.0/.
+//! [http://mozilla.org/MPL/2.0/](http://mozilla.org/MPL/2.0/).
 //!
 //! # Examples
 //!
@@ -26,7 +26,7 @@
 
 #![cfg_attr(feature = "docs", feature(staged_api))]
 #![cfg_attr(feature = "docs", stable(feature = "default", since = "0.1.0"))]
-#![cfg_attr(feature = "i128", feature(i128_type))]
+#![cfg_attr(feature = "docs", feature(i128_type))]
 
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
@@ -43,6 +43,12 @@ extern crate num_traits;
 #[cfg(feature = "ndarray")]
 extern crate ndarray;
 
+#[cfg(feature = "fpa")]
+extern crate fpa;
+
+#[cfg(feature = "typenum")]
+extern crate typenum;
+
 #[macro_use]
 mod assert;
 
@@ -56,6 +62,9 @@ mod rational_impl;
 
 #[cfg(feature = "ndarray")]
 mod ndarray_impl;
+
+#[cfg(feature = "fpa")]
+mod fpa_impl;
 
 use std::rc::{Rc, Weak};
 
@@ -331,4 +340,3 @@ impl<A: ?Sized, B, C: NearlyEq<A, B> + ?Sized> NearlyEq<RefCell<A>, B> for RefCe
         (*self).borrow().eq(&(*other).borrow(), eps)
     }
 }
-

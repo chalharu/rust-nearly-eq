@@ -5,7 +5,7 @@ rust:
 - beta
 - nightly
 
-sudo: false
+sudo: true
 
 os:
 - linux
@@ -22,22 +22,12 @@ addons:
     - libdw-dev
     - binutils-dev
     - libiberty-dev
+    - cmake
 
 before_script:
 - |
   if [ "${TRAVIS_OS_NAME}" = 'osx' ]; then
     export PATH=$HOME/Library/Python/2.7/bin:$PATH
-  fi
-- |
-  if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    cargo install cargo-kcov
-    if [ ! -x $HOME/.cargo/bin/kcov ] || [ ! -f $HOME/.cargo/bin/kcov ]; then
-      mkdir kcov
-      cd kcov
-      cargo kcov --print-install-kcov-sh | sh
-      cd ${TRAVIS_BUILD_DIR}
-      rm -rf kcov
-    fi
   fi
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
@@ -48,28 +38,28 @@ before_script:
   fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-    export FEATURES="complex rational ndarray i128"
+    export FEATURES="complex rational ndarray use_fpa i128"
   else
-    export FEATURES="complex rational ndarray"
+    export FEATURES="complex rational ndarray use_fpa"
   fi
+- cargo install cargo-update || echo "cargo-update already installed"
+- cargo install cargo-travis || echo "cargo-travis already installed"
+- cargo install-update -a || true # update outdated cached binaries
+
 
 script:
 - cargo build --features="$FEATURES"
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    RUSTFLAGS='-C debug-assertions=off' cargo kcov --coveralls --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo kcov --coveralls --features="$FEATURES"
+    cargo coveralls --features="$FEATURES" || cargo test --features="$FEATURES"
   else
-    RUSTFLAGS='-C debug-assertions=off' cargo test --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo test --features="$FEATURES"
+    cargo test --features="$FEATURES"
   fi
 - |
   if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    RUSTFLAGS='-C debug-assertions=off' cargo kcov --release --coveralls --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo kcov --release --coveralls --features="$FEATURES"
+    cargo coveralls --release --features="$FEATURES" || cargo test --release --features="$FEATURES"
   else
-    RUSTFLAGS='-C debug-assertions=off' cargo test --release --features="$FEATURES"
-    RUSTFLAGS='-C debug-assertions=on' cargo test --release --features="$FEATURES"
+    cargo test --release --features="$FEATURES"
   fi
 - |
   if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
@@ -92,12 +82,17 @@ after_success:
   if [ "${TRAVIS_OS_NAME}" = "linux" ] &&
      [ "${TRAVIS_RUST_VERSION}" = "stable" ] &&
      [ "${TRAVIS_BRANCH}" = "master" ] &&
-     [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+     [ "${TRAVIS_PULL_REQUEST}" = "false" ] &&
+     [ "${RUSTFLAGS}"="-C debug-assertions=off" ] &&
+     [ "${TRAVIS_EVENT_TYPE}" = "push" ]; then
     git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages &&
     cargo publish
   fi
 
 env:
+  matrix:
+    - RUSTFLAGS="-C debug-assertions=on"
+    - RUSTFLAGS="-C debug-assertions=off"
   global:
     secure: qwMSXpdCryGDyfiy1lXEcR/kWhATlQGVNAqV83n9uBKDLP6WsX4C25zMAz1/0wkjiorBMNFGhxMLI956md7V84sLX+6FNfA0tRODtAnJYyjR3AX4RkXB6zFhbTqWg/2BAefJ7Y7Vy0qKLKbqFq6023lKg09Mk80fEReba4PisrMgfj3LCCUarAnxfuFnAB7LmlvWXHNd3w+x6dV8fxO0Zw6QoqB9wQQvQzIiApqWCTyoxQhW+qzo6bXrctPct/OGNhmf4I0l1QJBGPN6qpFrxSjFljbxqIBiagCb6k1WERpok2FiNjhXCowUhTMyaGIlZLaVLjuISu8+aCyHZqK/yQLIDwWm5iY3Ko1gUbhvcg3aQV2ovpN8nxrQaiEkhg8mUPDPG0NencibFItb510L/VK3UkBWgTcKmwMjsqErh/l3a6UvezSAkUHrkMMAGLSrKnveFXeGCTwePLN40NgqJzuKsaSL+gqlTP7dHVtWpsBIvmrK7x4ItwWGRETYQR9HJQbeX+bxQSDJRpkuSTmY1iFL6GF1R0SNRYjXIeZ8Ei8F6O0RqUl7sWjMf9KEWD1LVkWj3X8eM+lTLyNSzP9BGlTP/Q34oJ2LKc4lYj59NE5ai4/rzfz0p8/ANoEJxUJoYgkdl90jw90UltPEjxD7YeCJ8WVhB4tp72qV44RtlDA=
 
@@ -105,3 +100,8 @@ cache:
   cargo: true
   apt: true
   pip: true
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always

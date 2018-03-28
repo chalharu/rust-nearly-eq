@@ -1,5 +1,3 @@
-#![cfg_attr(feature = "i128", feature(i128_type))]
-
 #[cfg(feature = "num-complex")]
 extern crate num_complex;
 
@@ -8,6 +6,9 @@ extern crate ndarray;
 
 #[cfg(feature = "num-rational")]
 extern crate num_rational;
+
+#[cfg(feature = "fpa")]
+extern crate fpa;
 
 #[macro_use]
 extern crate nearly_eq;
@@ -20,6 +21,9 @@ use num_rational::Rational;
 
 #[cfg(feature = "ndarray")]
 use ndarray::{ArrayD, IxDyn, arr1, arr2, arr3};
+
+#[cfg(feature = "fpa")]
+use fpa::*;
 
 use std::rc::Rc;
 
@@ -295,6 +299,32 @@ fn bad_compare_with_ratio() {
     let right = Rational::new(1, 1001);
     let eps = Rational::new(1, 1000000000);
     assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+#[cfg(feature = "fpa")]
+fn compare_with_fpa_eps() {
+    let left = I16F16(42.000_f32).unwrap();
+    let right = I16F16(42.001_f32).unwrap();
+    let eps = I16F16(00.001_f32).unwrap();
+    assert_nearly_eq!(left, right, eps);
+}
+
+#[test]
+#[cfg(feature = "fpa")]
+fn compare_with_fpa() {
+    let left = I16F16(42.00000_f32).unwrap();
+    let right = I16F16(42.00001_f32).unwrap();
+    assert_nearly_eq!(left, right);
+}
+
+#[test]
+#[should_panic]
+#[cfg(feature = "fpa")]
+fn bad_compare_with_fpa() {
+    let left = I16F16(42.000_f32).unwrap();
+    let right = I16F16(42.001_f32).unwrap();
+    assert_nearly_eq!(left, right);
 }
 
 #[test]
