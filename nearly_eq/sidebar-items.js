@@ -1,0 +1,1 @@
+initSidebarItems({"macro":[["assert_nearly_eq","Asserts that two expressions are nearly(approximately) equal to each other."],["debug_assert_nearly_eq","Asserts that two expressions are nearly(approximately) equal to each other."]],"trait":[["NearlyEq","Trait for nearly(approximately) equality comparisons."]]});
