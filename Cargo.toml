@@ -20,31 +20,31 @@ repository = "chalharu/rust-nearly-eq"
 
 [dependencies.typenum]
 optional = true
-version = ">=1.10.0"
+version = "=1.20.0"
 
 [dependencies.fpa]
 optional = true
-version = ">=0.1.0"
+version = "=0.1.0"
 
 [dependencies.ndarray]
 optional = true
-version = ">=0.0.0"
+version = "=0.17.2"
 
 [dependencies.num-complex]
 optional = true
-version = ">=0.0.0"
+version = "=0.4.6"
 
 [dependencies.num-integer]
 optional = true
-version = ">=0.0.0"
+version = "=0.1.46"
 
 [dependencies.num-rational]
 optional = true
-version = ">=0.0.0"
+version = "=0.4.2"
 
 [dependencies.num-traits]
 optional = true
-version = ">=0.0.0"
+version = "=0.2.19"
 
 [features]
 complex = ["num-complex"]
